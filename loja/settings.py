@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # Meus apps
     'produto',
+    'pedido',
 
     # Debug Toolbar
     'debug_toolbar',
