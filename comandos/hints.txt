@@ -1,0 +1,11 @@
+# gerando o arquivo .pylintrc
+pylint --generate-rcfile > .pylintrc
+
+# abra o arquivo .pylintrc em um editor de texto
+# rocure a seção [FORMAT] ou [MASTER]
+# adicione ou modifique a linha referente à indent-string. para usar 2 espaços, configure assim:
+indent-string='  '
+
+# verificar se há alguma migração que precisa ser feita
+python manage.py makemigrations --dry-run --check
+
