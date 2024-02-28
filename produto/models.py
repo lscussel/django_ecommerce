@@ -1,6 +1,7 @@
 from typing import Iterable
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 from PIL import Image
 import os
 
@@ -8,12 +9,12 @@ import os
 class Produto(models.Model):
   nome = models.CharField(max_length=255)
   descricao_curta = models.TextField(max_length=255)
-  descricao_longa = models.TextField
-  imagem = models.ImageField(upload_to='produto_imagens/%Y/%m/', blank=True, null=True)
-  slug = models.SlugField(unique=True)
+  descricao_longa = models.TextField(blank=True)
+  imagem = models.ImageField(upload_to='produto_imagens/%Y/%m', blank=True, null=True)
+  slug = models.SlugField(unique=True, blank=True)
   preco_marketing = models.FloatField()
   preco_marketing_promocional = models.FloatField(default=0)
-  tipo = models.CharField(default='V', max_length=1, choices=(('V', 'Variação'), ('S', 'Simples'),))
+  tipo = models.CharField(default='V', max_length=1, choices=(('V', 'Variável'), ('S', 'Simples'),))
 
   @staticmethod
   def resize_image(img, new_width=800):
@@ -30,7 +31,13 @@ class Produto(models.Model):
     new_img.save(img_full_path, optimize=True, quality=50)
 
   def save(self, *args, **kwargs):
+    slug_antes_salvar = self.slug
     super().save(*args, **kwargs)
+
+    if not slug_antes_salvar:
+      self.slug = slugify(f'{self.nome}-{self.pk}')
+      super().save(*args, **kwargs)
+
     if self.imagem:
       self.resize_image(self.imagem)
 
