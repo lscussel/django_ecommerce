@@ -12,9 +12,15 @@ class Produto(models.Model):
   descricao_longa = models.TextField(blank=True)
   imagem = models.ImageField(upload_to='produto_imagens/%Y/%m', blank=True, null=True)
   slug = models.SlugField(unique=True, blank=True)
-  preco_marketing = models.FloatField()
-  preco_marketing_promocional = models.FloatField(default=0)
+  preco_marketing = models.FloatField(verbose_name='Preço')
+  preco_marketing_promocional = models.FloatField(default=0, verbose_name='Preço promocional')
   tipo = models.CharField(default='V', max_length=1, choices=(('V', 'Variável'), ('S', 'Simples'),))
+
+  def get_preco_marketing(self):
+    return f'R$ {self.preco_marketing:.2f}'.replace('.', ',')
+  
+  def get_preco_promocional(self):
+    return f'R$ {self.preco_marketing_promocional:.2f}'.replace('.', ',')
 
   @staticmethod
   def resize_image(img, new_width=800):

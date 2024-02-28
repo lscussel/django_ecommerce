@@ -9,6 +9,7 @@ class VariacaoInline(admin.TabularInline):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
+  list_display = [ 'nome', 'descricao_curta', 'get_preco_marketing', 'get_preco_promocional' ]
   inlines = [ VariacaoInline ]
   readonly_fields = ('slug',)
 
