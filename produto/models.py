@@ -18,9 +18,11 @@ class Produto(models.Model):
 
   def get_preco_marketing(self):
     return f'R$ {self.preco_marketing:.2f}'.replace('.', ',')
+  get_preco_marketing.short_description = 'Preço'
   
   def get_preco_promocional(self):
     return f'R$ {self.preco_marketing_promocional:.2f}'.replace('.', ',')
+  get_preco_promocional.short_description = 'Preço promocional'
 
   @staticmethod
   def resize_image(img, new_width=800):
